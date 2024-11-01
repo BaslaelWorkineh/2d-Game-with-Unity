@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float fireRate = 0.5f; // Time between shots in seconds
     float lastFireTime; // The last time the player fired
 
+    private Gun currentGun;
     private void Awake()
     {
         controller = GetComponent<CharacterController2D>();
@@ -43,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
         collider = GetComponent<CapsuleCollider2D>();
         PlayerPrefs.SetInt("PlayerHasGun", 1); // Use 0 if the player does not have a gun
         PlayerPrefs.Save(); // Save the changes
+        
+         currentGun = gun.GetComponent<Gun>(); // Retrieve the Gun component on current gun
     }
 
     void Start()
@@ -96,46 +99,47 @@ public class PlayerMovement : MonoBehaviour
     Vector2 direction;
     void Aim()
     {
-        // Get joystick input
         float horizontal = aimJoystick.Horizontal;
         float vertical = aimJoystick.Vertical;
 
-        // Check if the joystick is moved enough to aim
         if (Mathf.Abs(horizontal) > 0.1f || Mathf.Abs(vertical) > 0.1f)
         {
-            direction = new Vector2(horizontal, vertical).normalized; // Use joystick direction
+            direction = new Vector2(horizontal, vertical).normalized;
             aiming = true;
             SetIkWeight(1);
             crossHair.SetActive(true);
 
-            // Flip the player if aiming in the opposite direction of facing
             if ((direction.x < 0 && controller.m_FacingRight) || (direction.x > 0 && !controller.m_FacingRight))
             {
                 controller.Flip_Aim();
             }
 
-            // Fire button logic with cooldown
-            if (Time.time > lastFireTime + fireRate) // Check if enough time has passed
+            if (currentGun != null && Time.time > lastFireTime + currentGun.fireRate)
             {
-                if ((aimJoystick.Vertical > .7f || aimJoystick.Vertical < -.7f) || 
-                    (aimJoystick.Horizontal > .7f || aimJoystick.Horizontal < -.7f)) // Check if joystick is moved out
+                if (Mathf.Abs(aimJoystick.Horizontal) > 0.7f || Mathf.Abs(aimJoystick.Vertical) > 0.7f)
                 {
                     Instantiate(bulletDustPs, gunPoint.position, gunPoint.rotation);
                     SpawnBullet();
                     audio_.PlayOneShot("Fire");
-                    lastFireTime = Time.time; // Update last fire time
+                    lastFireTime = Time.time;
                 }
             }
 
             return;
         }
 
-        // If joystick is not being used, stop aiming
         aiming = false;
         SetIkWeight(0);
         crossHair.SetActive(false);
     }
 
+
+
+    public void SetCurrentGun(Gun selectedGun)
+    {
+        currentGun = selectedGun;
+    }
+    
     bool jump = false;
 
     void Jump()
