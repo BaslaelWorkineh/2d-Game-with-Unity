@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea6dbecc3a3b7f94b865f7cfcef44aa8, type: 3}
+  m_Name: Spider_black_data
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  moveSpeed: 160
+  runSpeed: 260
+  knockbackPower: 400
+  checkWallDistance: 3
+  checkPlayerInMinDistance: 8
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 128
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 2112
+  bombPrefab: {fileID: 8529502744321883957, guid: 910b53647bc42f54c8b0f9596fa27711, type: 3}
+  coinPrefab: {fileID: 822744983430636483, guid: 8c78cc6dfaeb3734ca222cc12730e754, type: 3}
